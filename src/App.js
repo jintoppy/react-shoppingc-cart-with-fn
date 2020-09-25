@@ -1,26 +1,37 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useReducer } from 'react';
+import { BrowserRouter, Route, Switch, Link } from 'react-router-dom';
+import { StoreContext, reducer, initialState } from './store';
+
+import Header from './components/Header/Header';
+import Cart from './pages/Cart/Cart';
+import Home from './pages/Home/Home';
+
 import './App.css';
 
-function App() {
+const App = () => {
+  const [store, dispatch] = useReducer(reducer, initialState);
+  const storeContextData = {
+    store,
+    dispatch
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <StoreContext.Provider value={storeContextData}>
+      <BrowserRouter>
+        <Header />
+        <Switch>
+          <Route path="/cart">
+            <Cart />
+          </Route>
+
+          <Route path="/" exact>
+            <Home />
+          </Route>
+
+        </Switch>
+      </BrowserRouter>
+    </StoreContext.Provider>
+  )
 }
 
 export default App;
